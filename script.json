@@ -1,0 +1,33 @@
+{
+  "situation": "寝る前の静かな寝室。彼女は隣で眠りにつこうとしている彼氏に、そっと愛を伝える。",
+  "scene_elements": [
+    {
+      "speaker": "situation explainer",
+      "script": "夜の静かな寝室。ベッドの上で、彼氏がゆっくりと寝息を立てている。彼女は彼に寄り添い、その寝顔をじっと見つめている。"
+    },
+    {
+      "speaker": "main character",
+      "script": "ねえ、起きてる？…ふふ、寝ちゃったかな。でも、この時間、すごく好きだよ。"
+    },
+    {
+      "speaker": "situation explainer",
+      "script": "彼女はそっと彼の髪を撫で、穏やかな表情で言葉を続ける。彼の温もりを感じながら。"
+    },
+    {
+      "speaker": "main character",
+      "script": "いつもありがとう。今日あった嫌なことも、あなたの隣にいると全部忘れちゃう。あなたがいてくれるだけで、毎日が特別になるんだ。"
+    },
+    {
+      "speaker": "situation explainer",
+      "script": "彼がわずかに身動ぎする気配に、彼女はさらに優しく微笑む。彼の指先に自分の指を絡ませる。"
+    },
+    {
+      "speaker": "main character",
+      "script": "世界で一番、あなたが大好きだよ。おやすみ、私の大切な人。"
+    },
+    {
+      "speaker": "situation explainer",
+      "script": "彼女もゆっくりと目を閉じ、彼の腕の中で安らかな眠りにつく。部屋には二人の穏やかな寝息だけが響く。"
+    }
+  ]
+}

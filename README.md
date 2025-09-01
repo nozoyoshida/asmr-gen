@@ -45,11 +45,6 @@ graph TD
     F --> H(ASMR化エージェント);
     G --> H;
     H --> I[出力: バイノーラルASMR音声 WAV];
-
-    style B fill:#f9f,stroke:#333,stroke-width:2px
-    style D fill:#f9f,stroke:#333,stroke-width:2px
-    style E fill:#ccf,stroke:#333,stroke-width:2px
-    style H fill:#9cf,stroke:#333,stroke-width:2px
 ```
 
 ## 🛠️ 使用技術スタック

@@ -1,4 +1,3 @@
-```markdown
 # ASMR-GEN: 自動ASMRコンテンツ生成フレームワーク
 
 **Proprietary + Confidential** | Developed by @nozoyoshida | July 2025

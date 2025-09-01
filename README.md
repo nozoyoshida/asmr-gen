@@ -195,4 +195,3 @@ python main.py --situation "恋人との寝る前の平和なやり取り" --out
 このプロジェクトは専有（Proprietary）ライセンスの下で管理されています。
 
 (C) 2025 nozoyoshida. Proprietary + Confidential.
-```

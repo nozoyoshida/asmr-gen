@@ -1,6 +1,4 @@
-# ASMR-GEN: 自動ASMRコンテンツ生成フレームワーク
-
-**Proprietary + Confidential** | Developed by @nozoyoshida | July 2025
+# [WIP] ASMR-GEN: 自動ASMRコンテンツ生成フレームワーク
 
 [![Powered by Gemini](https://img.shields.io/badge/Powered%20by-Gemini-blue?logo=google)](https://deepmind.google/technologies/gemini/)
 [![Framework: ADK](https://img.shields.io/badge/Framework-ADK-orange)](https://github.com/google/adk-python)

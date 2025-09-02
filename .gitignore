@@ -1,2 +1,8 @@
-*.DS_Store
-*.env
+# Environments
+.env
+.venv
+venv/
+__pycache__/
+
+# Output
+/asmr_gen_adk/output/

@@ -1,4 +1,4 @@
---- Google GenAI SDK に移行する — Gemini API 移行ページ（完全版まとめ） ---
+# Google GenAI SDK に移行する — Gemini API 移行ページ（完全版まとめ）
 
 ## 概要
 

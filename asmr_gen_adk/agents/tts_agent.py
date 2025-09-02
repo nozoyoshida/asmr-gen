@@ -1,18 +1,32 @@
 from google.adk.agents import LlmAgent
+from google.adk.agents.readonly_context import ReadonlyContext
+from google.adk.utils.instructions_utils import inject_session_state
+
 from ..tools.tts import synthesize_tts
+
+
+async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
+    """Constructs the prompt for the TTS agent with state injection."""
+
+    # Use optional state injection so missing keys don't raise a KeyError.
+    script_text = await inject_session_state("{script_text?}", readonly_ctx)
+    if not script_text:
+        raise ValueError("`script_text` not found in session state")
+
+    return (
+        "Use the tool to synthesize speech from the script below.\n\n"
+        f"=== SCRIPT ===\n{script_text}\n"
+        "==============\n\n"
+        f"Call synthesize_tts(text={script_text}, voice_name='Kore'). "
+        "If it fails, retry with voice_name='Puck'. Return only the file path."
+    )
+
 
 tts_agent = LlmAgent(
     name="tts_agent",
     model="gemini-2.5-flash",
     description="Synthesize a mono WAV from the prior script using Gemini TTS.",
-    # state からスクリプト文字列を注入（{script_text}）
-    instruction=(
-        "Use the tool to synthesize speech from the script below.\n\n"
-        "=== SCRIPT ===\n{script_text}\n"
-        "==============\n\n"
-        "Call synthesize_tts(text={script_text}, voice_name='Kore'). "
-        "If it fails, retry with voice_name='Puck'. Return only the file path."
-    ),
+    instruction=_build_instruction,
     tools=[synthesize_tts],
     output_key="wav_path",  # 生成先パスを state['wav_path'] に格納（次で参照しやすい）
 )

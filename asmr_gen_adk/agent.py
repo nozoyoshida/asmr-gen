@@ -3,7 +3,6 @@ from google.adk.agents import SequentialAgent
 from .agents.script_agent import script_agent
 from .agents.tts_agent import tts_agent
 
-# root は SequentialAgent（順序厳守）
 root_agent = SequentialAgent(
     name="asmr_gen_seq",
     description="Generate ASMR script then synthesize TTS in strict order.",

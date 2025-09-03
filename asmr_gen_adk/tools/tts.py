@@ -1,4 +1,5 @@
 import os, wave
+from typing import Optional
 from google import genai
 from google.genai import types
 
@@ -10,7 +11,7 @@ def _save_wav(filename: str, pcm: bytes, ch: int = 1, rate: int = 24000, sw: int
         wf.setnchannels(ch); wf.setsampwidth(sw); wf.setframerate(rate); wf.writeframes(pcm)
     return filename
 
-def synthesize_tts(text: str, wav_path: str | None = None, voice_name: str = "Kore") -> dict:
+def synthesize_tts(text: str, wav_path: Optional[str] = None, voice_name: str = "Kore") -> dict:
     if wav_path is None:
         wav_path = os.path.join(AUDIO_DIR, "output.wav")
     client = genai.Client()

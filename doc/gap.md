@@ -43,8 +43,8 @@ ASMR化処理に必須の音声処理ライブラリをプロジェクトに追�
 ASMR-GENのコア機能である、空間演出プランを生成するエージェントを新規に作成します。
 
 -   **ファイル**: `asmr_gen_adk/agents/spatial_plan_agent.py` を新規作成します。
--   **入力**: `script_json`
--   **処理**: Gemini 2.5 Pro を利用し、脚本の文脈（特に `situation explainer` の記述）を解釈して、`README.md`記載のキーフレーム形式（`time`, `azimuth`, `distance` 等を含むJSON配列）で空間演出プランを出力するプロンプトを設計します。
+-   **入力**: `script_json`, **モノラル音声ファイルのパス**
+-   **処理**: Gemini 2.5 Pro (Multi-modal) を利用し、脚本の文脈と、**実際の音声のタイミング（間やポーズ）**の両方を解釈して、`README.md`記載のキーフレーム形式（`time`, `azimuth`, `distance` 等を含むJSON配列）で空間演出プランを出力するプロンプトを設計します。
 -   **出力**: `spatial_plan_json`
 
 ### Step 4: 【新規】ASMR化エージェント（ツール）の作成 (`binaural_renderer.py`)
@@ -70,10 +70,10 @@ JSON形式の脚本から、読み上げるべきテキストを抽出するよ�
 
 ### Step 6: 全体ワークフローの再構築 (`agent.py`)
 
-直列実行から、`README.md`のフロー図に沿った並列・合流処理を含むワークフローに再構築します。
+`README.md`のフロー図に沿ったワークフローに再構築します。
 
--   **タスク**: `SequentialAgent` の使用を止め、ADKの `GraphAgent` や `ParallelAgent` を利用して、以下の処理フローを実装します。
-    1.  `script_agent` を実行。
-    2.  `script_agent` の出力を、**並列に** `tts_agent` と `spatial_plan_agent` に渡す。
-    3.  `tts_agent` と `spatial_plan_agent` の両方の実行完了を待つ。
-    4.  両者の出力を `asmr_agent` に渡し、最終的なバイノーラル音声を生成する。
+-   **タスク**: `SequentialAgent` を使用して、以下の処理フローを実装します。
+    1.  `script_agent` を実行し、脚本(JSON)を生成。
+    2.  `tts_agent` を実行し、モノラル音声(WAV)を生成。
+    3.  `spatial_plan_agent` を実行し、脚本と音声を基に空間演出プラン(JSON)を生成。
+    4.  `asmr_agent` を実行し、モノラル音声と空間演出プランを基に最終的なバイノーラル音声(WAV)を生成。

@@ -19,7 +19,7 @@ def BinauralRenderer(mono_audio_path: str, spatial_plan_json: str, output_path: 
     Returns:
         A dictionary containing the path to the output file or an error.
     """
-        try:
+    try:
         # Load mono audio
         mono_audio, fs = sp.io.read_audio(mono_audio_path)
         if mono_audio.ndim > 1:
@@ -59,14 +59,14 @@ def BinauralRenderer(mono_audio_path: str, spatial_plan_json: str, output_path: 
 
         # Binaural rendering for the dry signal
         binaural_dry = sp.process.binaural_rendering(
-            sp.sig.AmbiBSignal(dry_signal[:, np.newaxis], fs=fs), 
+            sp.sig.AmbiBSignal(dry_signal[:, np.newaxis], fs=fs),
             azi_interp, ele_interp, hrtf=hrtf
         )
 
         # Reverb processing for the wet signal
         board = Pedalboard([Reverb(room_size=0.7, damping=0.5, wet_level=1.0, dry_level=0.0, width=1.0)])
         wet_signal_mono = board(dry_signal, sample_rate=fs)
-        
+
         # Convert mono wet signal to stereo to match dry signal shape
         binaural_wet = np.tile(wet_signal_mono[:, np.newaxis], (1, 2))
 

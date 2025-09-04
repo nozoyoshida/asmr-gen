@@ -1,3 +1,6 @@
+## 再起動した時
+source /home/admin_/asmr-gen/.venv/bin/activate
+
 ## port 削除したい時
 sudo apt-get update
 sudo apt install lsof

@@ -44,10 +44,7 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
         "\n\n"
         "## Files to Process:"
         "- **Audio File:** `{wav_path}`"
-        "- **Script Text:**
----
-{script_text}
----"
+        "- **Script Text:**---{script_text}---"
         "\n\n"
         "Now, generate the timed JSON script."
     )

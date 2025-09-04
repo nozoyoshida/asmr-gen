@@ -21,7 +21,7 @@ def _save_wav(
 
 
 def synthesize_tts(
-    text: str, wav_path: Optional[str] = None, voice_name: str = "Kore"
+    text: str, wav_path: Optional[str] = None, voice_name: str = "Leda"
 ) -> dict:
     if wav_path is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")

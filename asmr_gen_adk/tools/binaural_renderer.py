@@ -1,11 +1,11 @@
 import numpy as np
 import soundfile as sf
-from adk.tool import Tool
+
 from pedalboard import Pedalboard, Reverb
-from spaudiopy import IO, process, sig
+import spaudiopy as sp
 import json
 
-class BinauralRenderer(Tool):
+class BinauralRenderer:
     """A tool to render mono audio into a binaural ASMR experience."""
 
     def __call__(self, mono_audio_path: str, spatial_plan_json: str, output_path: str) -> dict:
@@ -22,7 +22,7 @@ class BinauralRenderer(Tool):
         """
         try:
             # Load mono audio
-            mono_audio, fs = IO.read_audio(mono_audio_path)
+            mono_audio, fs = sp.io.read_audio(mono_audio_path)
             if mono_audio.ndim > 1:
                 mono_audio = mono_audio[:, 0]  # Ensure single channel
 
@@ -30,7 +30,7 @@ class BinauralRenderer(Tool):
             spatial_plan = json.loads(spatial_plan_json)
 
             # Load HRTF data
-            hrtf = IO.load_hrirs(samplerate=fs)
+            hrtf = sp.io.load_hrirs(samplerate=fs)
 
             # Create keyframe signals from the plan
             times = [k['time'] for k in spatial_plan]
@@ -59,8 +59,8 @@ class BinauralRenderer(Tool):
             dry_signal = mono_audio * gain
 
             # Binaural rendering for the dry signal
-            binaural_dry = process.binaural_rendering(
-                sig.AmbiBSignal(dry_signal[:, np.newaxis], fs=fs), 
+            binaural_dry = sp.process.binaural_rendering(
+                sp.sig.AmbiBSignal(dry_signal[:, np.newaxis], fs=fs), 
                 azi_interp, ele_interp, hrtf=hrtf
             )
 

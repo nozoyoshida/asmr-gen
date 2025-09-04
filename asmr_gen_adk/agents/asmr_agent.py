@@ -33,6 +33,6 @@ asmr_agent = LlmAgent(
     model="gemini-2.5-flash",
     description="Renders a mono audio file into a binaural ASMR WAV file.",
     instruction=_build_instruction,
-    tools=[BinauralRenderer()],
+    tools=[BinauralRenderer],
     output_key="binaural_output_path",
 )

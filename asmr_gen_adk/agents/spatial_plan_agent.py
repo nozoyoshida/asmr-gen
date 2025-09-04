@@ -5,8 +5,7 @@ from google.adk.utils.instructions_utils import inject_session_state
 
 async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     """Constructs the prompt for the spatial plan agent."""
-    situation = await inject_session_state("{situation}", readonly_ctx)
-    script_json = await inject_session_state("{script_json}", readonly_ctx)
+    script_json = await inject_session_state("{timed_script_json}", readonly_ctx)
     wav_path = await inject_session_state("{wav_path}", readonly_ctx)
 
     # The prompt is in a separate file, but we pass the wav_path for context.
@@ -31,7 +30,7 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
         "- The `time` of each keyframe must align with the events in the audio file."
         "- Output ONLY the JSON array."
         "\n\n"
-        f"Now, create the spatial plan for the situation: **{situation}**"
+        "Now, create the spatial plan."
     )
 
 spatial_plan_agent = LlmAgent(

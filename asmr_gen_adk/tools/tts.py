@@ -10,7 +10,7 @@ os.makedirs(AUDIO_DIR, exist_ok=True)
 
 
 def _save_wav(
-    filename: str, pcm: bytes, ch: int = 1, rate: int = 48000, sw: int = 2
+    filename: str, pcm: bytes, ch: int = 1, rate: int = 24000, sw: int = 2
 ) -> str:
     with wave.open(filename, "wb") as wf:
         wf.setnchannels(ch)

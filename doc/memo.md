@@ -16,6 +16,9 @@ sudo apt install lsof
 lsof -i:8000
 kill <port number>
 
+## 必要ツールインストール
+sudo apt-get install libportaudio2 portaudio19-dev
+
 ## gemini の TTS の女性リスト
 zephyr
 kore

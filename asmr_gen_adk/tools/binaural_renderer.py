@@ -1,7 +1,7 @@
 import numpy as np
 import soundfile as sf
 
-from pedalboard import Pedalboard, Reverb
+from pedalboard import Pedalboard, Reverb, Resample
 import spaudiopy as sp
 import json
 
@@ -25,6 +25,20 @@ def BinauralRenderer(mono_audio_path: str, spatial_plan_json: str, output_path: 
         mono_audio, fs = audio_signal.signal, audio_signal.fs
         if mono_audio.ndim > 1:
             mono_audio = mono_audio[:, 0]  # シングルチャンネルに変換
+
+        # サンプリングレートをチェックし、必要であればリサンプリング
+        supported_rates = [44100, 48000, 96000]
+        target_fs = 48000
+        if fs not in supported_rates:
+            try:
+                if mono_audio.dtype != np.float32:
+                    mono_audio = mono_audio.astype(np.float32)
+
+                resampler = Resample(source_rate=fs, target_rate=target_fs)
+                mono_audio = resampler(mono_audio)
+                fs = target_fs
+            except Exception as e:
+                return {"error": f"Resampling from {fs}Hz to {target_fs}Hz failed: {str(e)}"}
 
         # 空間化プランをパース
         spatial_plan = json.loads(spatial_plan_json)

@@ -9,6 +9,10 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     wav_path = await inject_session_state("{wav_path}", readonly_ctx)
     spatial_plan_json = await inject_session_state("{spatial_plan_json}", readonly_ctx)
 
+    # Clean up the spatial plan JSON by removing markdown formatting
+    if spatial_plan_json.startswith("```json"):
+        spatial_plan_json = spatial_plan_json[7:-4]
+
     # Define the output path for the final binaural audio
     output_dir = "asmr_gen_adk/output/audio"
     base_name = os.path.basename(wav_path)

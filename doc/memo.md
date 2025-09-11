@@ -20,3 +20,6 @@ laomedeia
 achernar
 vindemiatrix
 sulafat
+
+## now
+gemini cli 使えなくなった→ reload したらたえた

@@ -21,7 +21,8 @@ def BinauralRenderer(mono_audio_path: str, spatial_plan_json: str, output_path: 
     """
     try:
         # モノラル音声を読み込み
-        mono_audio, fs = sp.io.read_audio(mono_audio_path)
+        audio_signal = sp.io.load_audio(mono_audio_path)
+        mono_audio, fs = audio_signal.signal, audio_signal.fs
         if mono_audio.ndim > 1:
             mono_audio = mono_audio[:, 0]  # シングルチャンネルに変換
 
@@ -29,7 +30,7 @@ def BinauralRenderer(mono_audio_path: str, spatial_plan_json: str, output_path: 
         spatial_plan = json.loads(spatial_plan_json)
 
         # HRTFデータを読み込み
-        hrtf = sp.io.load_hrirs(samplerate=fs)
+        hrtf = sp.io.load_hrirs(fs=fs)
 
         # プランからキーフレーム信号を作成
         times = [k['time'] for k in spatial_plan]

@@ -33,5 +33,5 @@ achernar
 vindemiatrix
 sulafat
 
-## now
-gemini cli 使えなくなった→ reload したらたえた
+## token refresh 必要な時
+/auth で認証し直す

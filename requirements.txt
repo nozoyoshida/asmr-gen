@@ -5,3 +5,4 @@ spaudiopy
 pedalboard
 moviepy
 numpy
+librosa

@@ -1,3 +1,9 @@
+import warnings
+
+# ADKの実験的機能に関する警告を非表示にする
+warnings.filterwarnings("ignore", message=".*EXPERIMENTAL.*InMemoryCredentialService.*")
+warnings.filterwarnings("ignore", message=".*EXPERIMENTAL.*BaseCredentialService.*")
+
 from google.adk.agents import SequentialAgent
 from .agents.script_agent import script_agent
 from .agents.tts_agent import tts_agent

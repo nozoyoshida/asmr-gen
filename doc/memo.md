@@ -1,3 +1,12 @@
+## 実行したい時
+### 起動
+adk web -reload -v
+adk run asmr_gen_adk
+
+### シチュエーションを入力する
+例：彼女と南国のホテルで
+
+
 ## 再起動した時
 source /home/admin_/asmr-gen/.venv/bin/activate
 

@@ -16,14 +16,13 @@ logging.basicConfig(level=logging.INFO)
 TARGET_FS = 48000
 MIN_DISTANCE = 0.2 # 距離減衰の最小値 (近接効果の制限)
 
-def make_asmr_audio(audio_data: np.ndarray, sample_rate: int, script_json: Dict[str, Any], spatial_plan_json: List[Dict[str, Any]]) -> Tuple[np.ndarray, int]:
+def make_asmr_audio(audio_data: np.ndarray, sample_rate: int, spatial_plan_json: List[Dict[str, Any]]) -> Tuple[np.ndarray, int]:
     """
     モノラル音声と空間プランからバイノーラル音声をレンダリングする。
 
     Args:
         audio_data: 入力音声データ (モノラル推奨)
         sample_rate: 入力音声のサンプリングレート (例: 24000)
-        script_json: セリフ情報JSON (今回は使用しない)
         spatial_plan_json: 空間プラン情報JSON
 
     Returns:

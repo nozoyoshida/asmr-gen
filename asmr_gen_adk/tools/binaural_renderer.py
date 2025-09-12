@@ -307,7 +307,7 @@ if __name__ == '__main__':
 
     # 3. 関数の実行
     try:
-        output_audio, output_sr = make_asmr_audio(input_audio, INPUT_SR, script_data, spatial_plan_data)
+        output_audio, output_sr = make_asmr_audio(input_audio, INPUT_SR, spatial_plan_data)
 
         # 4. 結果の保存
         output_filename = "output_asmr_binaural_48k.wav"
@@ -340,7 +340,6 @@ def BinauralRenderer(mono_audio_path: str, spatial_plan_json: str, output_path: 
         output_audio, output_sr = make_asmr_audio(
             audio_data=audio_data,
             sample_rate=sample_rate,
-            script_json=script_data,
             spatial_plan_json=spatial_plan
         )
 

@@ -18,7 +18,7 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
 
 
     # Define the output path for the final binaural audio
-    output_dir = "asmr_gen_adk/output/audio"
+    output_dir = "asmr_gen_adk/output/binaural_audio"
     base_name = os.path.basename(wav_path)
     binaural_output_path = os.path.join(output_dir, f"binaural_{base_name}")
 

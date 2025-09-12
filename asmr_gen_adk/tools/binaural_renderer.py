@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import json
 import spaudiopy as spa
@@ -129,8 +130,22 @@ def _get_hrir_and_attenuation(hrtf, azimuth, elevation, distance):
     az_rad = np.deg2rad(-azimuth) 
     zen_rad = np.deg2rad(90 - elevation)
     
-    # HRIRの取得 (最も近いHRIRを取得)
-    hrir_l, hrir_r = hrtf.get_closest_hrir(az_rad, zen_rad)
+    # HRIRの座標リストと目標座標を直交座標に変換
+    x_hrtf, y_hrtf, z_hrtf = spa.utils.sph2cart(hrtf.azi, hrtf.zen)
+    x_target, y_target, z_target = spa.utils.sph2cart(az_rad, zen_rad)
+
+    # ユークリッド距離を計算
+    distances = np.sqrt(
+        (x_hrtf - x_target)**2 +
+        (y_hrtf - y_target)**2 +
+        (z_hrtf - z_target)**2
+    )
+
+    # 最も距離が近いHRIRのインデックスを見つける
+    nearest_idx = np.argmin(distances)
+
+    hrir_l = hrtf.left[nearest_idx, :]
+    hrir_r = hrtf.right[nearest_idx, :]
     hrir = np.vstack([hrir_l, hrir_r]).T
 
     # 距離減衰 (1/dモデル)
@@ -231,11 +246,11 @@ def _apply_dynamic_reverb(output_dry, interpolators):
     board = Pedalboard([
         # ASMRに適したリバーブ設定
         Reverb(room_size=0.6, damping=0.5, width=1.0, wet_level=1.0, dry_level=0.0)
-    ], sample_rate=TARGET_FS)
+    ])
 
     # 信号全体を通してリバーブ処理を行う
     # Pedalboardは(channels, samples)の形状を期待するため転置して処理し、元に戻す
-    output_wet = board.process(output_dry.T.astype(np.float32)).T
+    output_wet = board.process(output_dry.T.astype(np.float32), sample_rate=TARGET_FS).T
 
     # 2. 動的ミックス
     num_samples = output_dry.shape[0]
@@ -331,10 +346,6 @@ def BinauralRenderer(mono_audio_path: str, spatial_plan_json: str, output_path: 
 
         # 2. Load JSON data
         spatial_plan = json.loads(spatial_plan_json)
-        
-        # The new make_asmr_audio function requires a script_json, which is not provided by the agent.
-        # We'll pass an empty dict.
-        script_data = {}
 
         # 3. Call the rendering function
         output_audio, output_sr = make_asmr_audio(
@@ -343,8 +354,16 @@ def BinauralRenderer(mono_audio_path: str, spatial_plan_json: str, output_path: 
             spatial_plan_json=spatial_plan
         )
 
-        # 4. Save the output file
+        # 4. Ensure the output directory exists
+        output_dir = os.path.dirname(output_path)
+        os.makedirs(output_dir, exist_ok=True)
+
+        # 5. Save the output file
         sf.write(output_path, output_audio, output_sr)
+
+        # 6. Verify that the file was written
+        if not os.path.exists(output_path):
+            raise IOError(f"Failed to write output file to {output_path}")
 
         return {"binaural_output_path": output_path}
     except Exception as e:

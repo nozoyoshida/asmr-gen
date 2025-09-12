@@ -6,3 +6,6 @@ pedalboard
 moviepy
 numpy
 librosa
+# Testing
+pytest
+pytest-asyncio

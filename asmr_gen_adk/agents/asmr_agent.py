@@ -9,13 +9,9 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     wav_path = await inject_session_state("{wav_path}", readonly_ctx)
     spatial_plan_json = await inject_session_state("{spatial_plan_json}", readonly_ctx)
 
-    # Clean up the spatial plan JSON by removing markdown formatting and extra whitespace
-    cleaned_json = spatial_plan_json.strip()
-    if cleaned_json.startswith("```json"):
-        cleaned_json = cleaned_json[7:]
-    if cleaned_json.endswith("```"):
-        cleaned_json = cleaned_json[:-3]
-    cleaned_json = cleaned_json.strip()
+    # Clean up the spatial plan JSON by removing markdown formatting
+    if spatial_plan_json.startswith("```json"):
+        spatial_plan_json = spatial_plan_json[7:-4]
 
     # Define the output path for the final binaural audio
     output_dir = "asmr_gen_adk/output/audio"
@@ -25,10 +21,10 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     return f"""You are the final audio processing engineer. Your task is to render the binaural ASMR audio using the provided mono audio file and the spatial plan.
 
 1. **Mono Audio Path:** `{wav_path}`
-2. **Spatial Plan JSON:** `{cleaned_json}`
+2. **Spatial Plan JSON:** `{spatial_plan_json}`
 3. **Output Path:** `{binaural_output_path}`
 
-Use the `BinauralRenderer` tool to perform the rendering. Call the tool with: `BinauralRenderer(mono_audio_path='{wav_path}', spatial_plan_json='''{cleaned_json}''', output_path='{binaural_output_path}')`
+Use the `BinauralRenderer` tool to perform the rendering. Call the tool with: `BinauralRenderer(mono_audio_path='{wav_path}', spatial_plan_json='''{spatial_plan_json}''', output_path='{binaural_output_path}')`
 
 Upon completion, output only the path to the final binaural audio file.
 """

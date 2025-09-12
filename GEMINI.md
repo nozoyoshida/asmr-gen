@@ -31,14 +31,11 @@ GEMINI_API_KEY=YOUR_API_KEY
 
 **3. アプリケーションの実行:**
 
-`README.md` では以下のようなコマンドが提案されていますが、正確なエントリーポイント（`main.py`）は現在のディレクトリに存在しません。
+以下のいずれかのコマンドで起動
 
-```bash
-# README.md の例（main.py が見つかりません）
-python main.py --situation "恋人との寝る前の平和なやり取り" --output output_asmr.wav
-```
+adk web -reload -v
 
-**TODO:** エージェントシーケンスを実行するための正確なコマンドを明確にする必要があります。`main.py` ファイルが存在しません。
+adk run asmr_gen_adk
 
 # 開発規約
 

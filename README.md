@@ -192,14 +192,12 @@ GEMINI_API_KEY=YOUR_API_KEY
 
 ### 使用方法
 
-メインスクリプト（またはADKのエントリーポイント）を実行し、生成したいシチュエーションを入力します。
+以下のいずれかのコマンドで起動
 
-```bash
-# 使用例（実際の実行方法は実装によります）
-python main.py --situation "恋人との寝る前の平和なやり取り" --output output_asmr.wav
-```
+adk web -reload -v
 
-処理が完了すると、指定された出力パスにバイノーラル化されたASMR音声ファイルが生成されます。
+adk run asmr_gen_adk
+
 
 ## 📄 ライセンス
 

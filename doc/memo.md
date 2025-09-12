@@ -1,6 +1,9 @@
 ## 実行したい時
 ### 起動
+以下のいずれかのコマンドで起動
+
 adk web -reload -v
+
 adk run asmr_gen_adk
 
 ### シチュエーションを入力する

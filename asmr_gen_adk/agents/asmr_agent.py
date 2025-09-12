@@ -1,4 +1,5 @@
 import os
+import re
 from google.adk.agents import LlmAgent
 from google.adk.agents.readonly_context import ReadonlyContext
 from google.adk.utils.instructions_utils import inject_session_state
@@ -10,8 +11,11 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     spatial_plan_json = await inject_session_state("{spatial_plan_json}", readonly_ctx)
 
     # Clean up the spatial plan JSON by removing markdown formatting
-    if spatial_plan_json.startswith("```json"):
-        spatial_plan_json = spatial_plan_json[7:-4]
+    # Use regex to find the JSON block, allowing for surrounding text/whitespace
+    match = re.search(r'```(json)?\s*([\s\S]*?)\s*```', spatial_plan_json)
+    if match:
+        spatial_plan_json = match.group(2).strip()
+
 
     # Define the output path for the final binaural audio
     output_dir = "asmr_gen_adk/output/audio"

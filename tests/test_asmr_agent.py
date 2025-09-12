@@ -50,7 +50,9 @@ async def test_build_instruction_prompt_generation():
     assert f"1. **Mono Audio Path:** `{test_wav_path}`" in prompt
     
     # Check that the spatial plan is correctly embedded AND the markdown is stripped
-    assert f"spatial_plan_json='''{test_spatial_plan}'''" in prompt
+    # The agent wraps the JSON in triple quotes for the tool call
+    cleaned_json = test_spatial_plan_with_markdown.strip().replace("```json", "").replace("```", "").strip()
+    assert f"spatial_plan_json='''{cleaned_json}'''" in prompt
     assert "```json" not in prompt # Ensure markdown is gone
 
     # Check that the output path is correctly constructed and embedded
@@ -61,7 +63,7 @@ async def test_build_instruction_prompt_generation():
     # Check that the final tool call is well-formed
     expected_tool_call = (
         f"Call the tool with: `BinauralRenderer(mono_audio_path='{test_wav_path}', "
-        f"spatial_plan_json='''{test_spatial_plan}''', "
+        f"spatial_plan_json='''{cleaned_json}''', "
         f"output_path='{expected_output_path}')`"
     )
     assert expected_tool_call in prompt

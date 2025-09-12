@@ -2,7 +2,7 @@
 
 ## P0: 最優先タスク（アプリケーションの正常化）
 
-- [ ] **`binaural_renderer`ツールの修正**
+n- [x] **`binaural_renderer`ツールの修正**
     - **内容**: `asmr_agent` と `BinauralRenderer` ツールの間のインターフェースの不整合を解消する。
     - **ファイル**: `asmr_gen_adk/tools/binaural_renderer.py`
     - **具体的な作業**:

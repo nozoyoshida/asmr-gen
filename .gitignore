@@ -6,3 +6,4 @@ __pycache__/
 
 # Output
 /asmr_gen_adk/output/
+.pytest_cache/

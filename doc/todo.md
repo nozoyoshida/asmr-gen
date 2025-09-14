@@ -28,7 +28,7 @@
 
 - [x] **設定の外部化**
     - **内容**: コード内にハードコーディングされているモデル名 (`gemini-2.5-pro` 等) やTTSのボイス名 (`Kore` 等) を、設定ファイル（例: `config.yaml`）に分離する。
-    - **対象**: `script_agent`, `tts_agent`, `jsonize_agent`, `spatial_plan_agent`
+    - **対象**: `script_agent`, `tts_agent`, `jsonize_agent`, `spatial_plan_agent`, `asmr_agent`
 
 - [ ] **テストコードの導入**
     - **内容**: 各エージェントの単体テストと、`SequentialAgent` の全体的な動作を検証する結合テストを作成する。

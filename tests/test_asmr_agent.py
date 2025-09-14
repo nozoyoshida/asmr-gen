@@ -57,7 +57,7 @@ async def test_build_instruction_prompt_generation():
 
     # Check that the output path is correctly constructed and embedded
     base_name = os.path.basename(test_wav_path)
-    expected_output_path = f"asmr_gen_adk/output/audio/binaural_{base_name}"
+    expected_output_path = f"asmr_gen_adk/output/binaural_audio/binaural_{base_name}"
     assert f"3. **Output Path:** `{expected_output_path}`" in prompt
     
     # Check that the final tool call is well-formed

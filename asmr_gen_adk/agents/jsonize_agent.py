@@ -1,6 +1,10 @@
+import yaml
 from google.adk.agents import LlmAgent
 from google.adk.agents.readonly_context import ReadonlyContext
 from google.adk.utils.instructions_utils import inject_session_state
+
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
 
 async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     """Constructs the prompt for the Jsonize agent."""
@@ -51,7 +55,7 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
 
 jsonize_agent = LlmAgent(
     name="jsonize_agent",
-    model="gemini-2.5-pro", # Requires a multi-modal model
+    model=config["models"]["jsonize_agent"], # Requires a multi-modal model
     description="Creates a timed, structured JSON script from text and audio.",
     instruction=_build_instruction,
     output_key="timed_script_json",

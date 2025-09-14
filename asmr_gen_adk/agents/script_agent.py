@@ -1,8 +1,12 @@
+import yaml
 from google.adk.agents import LlmAgent
+
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
 
 script_agent = LlmAgent(
     name="script_agent",
-    model="gemini-2.5-pro",
+    model=config["models"]["script_agent"],
     description="Writes a short, single-speaker Japanese ASMR script.",
     instruction=(
         "You are an ASMR scriptwriter. Write a script based on the situation given. "

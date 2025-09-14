@@ -9,3 +9,4 @@ librosa
 # Testing
 pytest
 pytest-asyncio
+PyYAML

@@ -1,7 +1,11 @@
 import json
+import yaml
 from google.adk.agents import LlmAgent
 from google.adk.agents.readonly_context import ReadonlyContext
 from google.adk.utils.instructions_utils import inject_session_state
+
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
 
 async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     """Constructs the prompt for the spatial plan agent."""
@@ -35,7 +39,7 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
 
 spatial_plan_agent = LlmAgent(
     name="spatial_plan_agent",
-    model="gemini-2.5-pro", # Assuming this model has multi-modal capabilities
+    model=config["models"]["spatial_plan_agent"], # Assuming this model has multi-modal capabilities
     description="Creates a spatial audio plan from a script and audio file.",
     instruction=_build_instruction,
     output_key="spatial_plan_json",

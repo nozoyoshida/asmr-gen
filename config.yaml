@@ -1,0 +1,13 @@
+# Configuration for ASMR-GEN Agents
+
+# Model names used by different agents
+models:
+  script_agent: gemini-2.5-pro
+  jsonize_agent: gemini-2.5-pro
+  spatial_plan_agent: gemini-2.5-pro
+  tts_agent: gemini-2.5-flash
+
+# Text-to-Speech (TTS) settings
+tts:
+  primary_voice: Kore
+  fallback_voice: Puck

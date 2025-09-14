@@ -26,7 +26,7 @@
 
 ## P2: メンテナンス性と拡張性の向上
 
-- [ ] **設定の外部化**
+- [x] **設定の外部化**
     - **内容**: コード内にハードコーディングされているモデル名 (`gemini-2.5-pro` 等) やTTSのボイス名 (`Kore` 等) を、設定ファイル（例: `config.yaml`）に分離する。
     - **対象**: `script_agent`, `tts_agent`, `jsonize_agent`, `spatial_plan_agent`
 

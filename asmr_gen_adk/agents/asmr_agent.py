@@ -1,9 +1,16 @@
 import os
 import re
+import yaml
 from google.adk.agents import LlmAgent
 from google.adk.agents.readonly_context import ReadonlyContext
 from google.adk.utils.instructions_utils import inject_session_state
 from ..tools.binaural_renderer import BinauralRenderer
+
+# Load configuration
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+ASMR_AGENT_MODEL = config["models"]["asmr_agent"]
 
 async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     """Constructs the prompt for the ASMR agent."""
@@ -35,7 +42,7 @@ Upon completion, output only the path to the final binaural audio file.
 
 asmr_agent = LlmAgent(
     name="asmr_agent",
-    model="gemini-2.5-flash",
+    model=ASMR_AGENT_MODEL,
     description="Renders a mono audio file into a binaural ASMR WAV file.",
     instruction=_build_instruction,
     tools=[BinauralRenderer],

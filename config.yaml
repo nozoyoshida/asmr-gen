@@ -5,6 +5,7 @@ models:
   script_agent: gemini-2.5-pro
   jsonize_agent: gemini-2.5-pro
   spatial_plan_agent: gemini-2.5-pro
+  asmr_agent: gemini-2.5-flash
   tts_agent: gemini-2.5-flash
 
 # Text-to-Speech (TTS) settings

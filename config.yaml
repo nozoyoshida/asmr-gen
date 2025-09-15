@@ -1,6 +1,8 @@
-# Configuration for ASMR-GEN Agents
+n# Configuration for ASMR-GEN Agents
 
 # Model names used by different agents
+# pro: 創造性や精度が重要なタスク（脚本生成、空間プランニングなど）に利用
+# flash: 速度が重要なタスク（TTS、音声処理など）に利用
 models:
   script_agent: gemini-2.5-pro
   jsonize_agent: gemini-2.5-pro

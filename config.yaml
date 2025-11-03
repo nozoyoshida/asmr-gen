@@ -12,5 +12,5 @@ models:
 
 # Text-to-Speech (TTS) settings
 tts:
-  primary_voice: zephyr
-  fallback_voice: leda
+  primary_voice: laomedeia
+  fallback_voice: erinome

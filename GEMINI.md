@@ -70,6 +70,108 @@ graph TD
 
 ---
 
+## このADKコードの仕組み
+
+このプロジェクトは、Agent Development Kit (ADK) の主要な機能を活用して構築されています。コードの全体像を理解するために、ADKの基本的な仕組みを解説します。
+
+### 1. エージェントの定義と連携 (`agent.py`)
+
+プロジェクトの中心となる `asmr_gen_adk/agent.py` では、`SequentialAgent` を使って、複数のエージェントを連結しています。
+
+```python
+root_agent = SequentialAgent(
+    name="asmr_gen_seq",
+    description="Generate a full ASMR experience from a situation.",
+    sub_agents=[
+        script_agent,
+        tts_agent,
+        jsonize_agent,
+        spatial_plan_agent,
+        asmr_agent,
+    ],
+)
+```
+
+- `SequentialAgent`: `sub_agents` に登録されたエージェントをリストの順に一つずつ実行します。
+- 各エージェントは、前のエージェントの出力を引き継ぎながら、自身のタスクを実行します。
+
+### 2. LLMエージェント (`LlmAgent`)
+
+このプロジェクトのほとんどのエージェントは `LlmAgent` として定義されています。これは、LLMとの対話を通じてタスクを実行するエージェントです。
+
+```python
+# 例: script_agent.py
+script_agent = LlmAgent(
+    name="script_agent",
+    model=config["models"]["script_agent"],
+    description="Writes a short, single-speaker Japanese ASMR script.",
+    instruction="...",
+    output_key="script_text",
+)
+```
+
+- `model`: 使用するGeminiモデル名を指定します (`config.yaml` から読み込み）。
+- `instruction`: LLMに与える指示（プロンプト）です。静的な文字列を渡すことも、後述の動的な関数を渡すことも可能です。
+- `tools`: エージェントが使用できるツールのリストです（例: `tts_agent` の `synthesize_tts`）。
+- `output_key`: エージェントの実行結果（LLMの応答やツールの返り値）を、セッション状態に保存するためのキー名を指定します。
+
+### 3. 動的な指示の構築 (`_build_instruction`)
+
+後続のエージェントは、先行するエージェントの実行結果をプロンプトに組み込む必要があります。このために、`instruction` パラメータに `async` 関数を渡すパターンが使われています。
+
+```python
+# 例: tts_agent.py
+async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
+    script_text = await inject_session_state("{script_text?}", readonly_ctx)
+    if not script_text:
+        raise ValueError("`script_text` not found in session state")
+    # ... プロンプトを構築 ...
+    return f"..."
+
+tts_agent = LlmAgent(
+    ...,
+    instruction=_build_instruction,
+    ...
+)
+```
+
+- `_build_instruction`: この関数はエージェントの実行直前に呼び出されます。
+- `readonly_ctx`: 現在のセッション状態への読み取り専用アクセスを提供します。
+- `inject_session_state`: `"{key_name}"` のような形式で、セッション状態から値を取得し、文字列に埋め込みます。`?` を付けると、キーが存在しなくてもエラーにならず `None` が返ります。
+
+### 4. セッション状態管理 (State Management)
+
+エージェント間のデータ連携は、ADKのセッション状態（state）を介して行われます。
+
+- **保存**: 各エージェントの `output_key` に指定されたキー名で、そのエージェントの実行結果が自動的にセッション状態に保存されます。
+  - `script_agent` -> `state['script_text'] = "..."`
+  - `tts_agent` -> `state['wav_path'] = "..."`
+- **取得**: `_build_instruction` 内で `inject_session_state` を使うことで、先行するエージェントが保存した値を安全に取得できます。
+
+この仕組みにより、エージェント同士が疎結合に保たれ、各エージェントは自身の役割に集中できます。
+
+### 5. カスタムツールの利用
+
+`tts_agent` や `asmr_agent` のように、LLMの能力だけでは完結しないタスク（音声合成、バイノーラルレンダリングなど）は、カスタムツールとして実装されています。
+
+```python
+# 例: tts.py
+def synthesize_tts(text: str, ...) -> dict:
+    # ... 音声合成処理 ...
+    return {"wav_path": "..."}
+
+# 例: tts_agent.py
+tts_agent = LlmAgent(
+    ...,
+    tools=[synthesize_tts],  # ツールをエージェントに登録
+)
+```
+
+- Python関数としてツールを定義し、`LlmAgent` の `tools` リストに渡すだけで、エージェントはLLMの判断を通じてそのツールを呼び出すことができるようになります。
+- ツールの返り値（辞書形式）が、エージェントの `output_key` に従ってセッション状態に保存されます。
+
+---
+
 ## コア技術とツール
 
 ### `tools/binaural_renderer.py`

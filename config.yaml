@@ -12,5 +12,5 @@ models:
 
 # Text-to-Speech (TTS) settings
 tts:
-  primary_voice: Kore
-  fallback_voice: Puck
+  primary_voice: zephyr
+  fallback_voice: leda

@@ -10,7 +10,7 @@ script_agent = LlmAgent(
     description="Writes a short, single-speaker Japanese ASMR script.",
     instruction=(
         "You are an ASMR scriptwriter. Write a script based on the situation given. "
-        "Output ONLY the final script as plain text (no markdown / no JSON). "
+        "Output ONLY the final script as plain text in Hiragana (no markdown / no JSON / no Kanji). "
         "Length: ~20-40 seconds. Tone: gentle, 2nd person, PG-13.\n\n"
     ),
     output_key="script_text", 

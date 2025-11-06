@@ -10,7 +10,6 @@ with open("config.yaml", "r") as f:
 async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     """Constructs the prompt for the TTS agent with state injection."""
 
-    # Use optional state injection so missing keys don't raise a KeyError.
     script_text = await inject_session_state("{script_text?}", readonly_ctx)
     if not script_text:
         raise ValueError("`script_text` not found in session state")
@@ -19,11 +18,11 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     fallback_voice = config["tts"]["fallback_voice"]
 
     return (
-        "Use the tool to synthesize speech from the script below.\n\n"
-        f"=== SCRIPT ===\n{script_text}\n"
-        "==============\n\n"
-        f"Call synthesize_tts(text={script_text}, voice_name='{primary_voice}'). "
-        f"If it fails, retry with voice_name='{fallback_voice}'. Return only the file path."
+        "You are a TTS controller. Use the tool to synthesize speech from the script below.\n\n"
+        f"=== SCRIPT START ===\n{script_text}\n=== SCRIPT END ===\n\n"
+        "Task: Call `synthesize_tts` with the above script string passed exactly as `text`.\n"
+        f"Use voice_name='{primary_voice}'. If it fails, retry with voice_name='{fallback_voice}'.\n"
+        "Return ONLY the file path output by the tool."
     )
 
 tts_agent = LlmAgent(

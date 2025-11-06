@@ -27,9 +27,20 @@ def synthesize_tts(
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         wav_path = os.path.join(AUDIO_DIR, f"output_{timestamp}.wav")
     client = genai.Client()
+    
+    full_prompt = (
+        "Instruction for the AI voice actor:\n"
+        "Please read the following Japanese text very slowly, with a soft, gentle, and intimate whisper."
+        "Imagine you are very close to the listener's ear. "
+        "Pause for at least 2 seconds at ellipses (...) and punctuation marks. "
+        "The tone should be deeply relaxing, affectionate, and immersive, perfect for ASMR.\n\n"
+        "Text to read:\n"
+        f"{text}"
+    )
+    
     resp = client.models.generate_content(
         model="gemini-2.5-pro-preview-tts",
-        contents=text,
+        contents=full_prompt,
         config=types.GenerateContentConfig(
             response_modalities=["AUDIO"],
             speech_config=types.SpeechConfig(

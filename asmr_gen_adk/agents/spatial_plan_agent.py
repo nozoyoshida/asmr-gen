@@ -12,15 +12,18 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
     script_json = await inject_session_state("{timed_script_json}", readonly_ctx)
     wav_path = await inject_session_state("{wav_path}", readonly_ctx)
 
-    # The prompt is in a separate file, but we pass the wav_path for context.
-    # The model will use its multi-modal capabilities to analyze the audio.
-    # We are also passing the script content explicitly in the prompt.
     return (
-        "You are a professional sound designer specializing in ASMR. "
+        "You are a professional sound designer specializing in ASMR and binaural audio. "
         "Your task is to create a spatial audio plan (as a JSON array of keyframes) "
         "based on the provided script and the timing of the accompanying audio file. "
-        "Analyze the script for movement cues and the audio for pacing and pauses. "
-        "The keyframes should create a natural and immersive experience."
+        "Analyze the script for movement cues and the audio for pacing and pauses."
+        "\n\n"
+        "## CRITICAL CONSTRAINTS FOR ASMR REALISM (MUST FOLLOW):"
+        "1. **Extremely Close & Dry:** ASMR requires intimacy. Maintain a distance between **0.1m to 0.3m** for most of the time."
+        "2. **Reverb is Forbidden:** `reverb_mix` MUST be typically **0.0**. Max allowed is **0.03** (only when distant). Never exceed 0.05."
+        "3. **Stable Elevation:** Keep `elevation` strictly at **0 (ear level)** unless specific overhead actions occur. Do not move it randomly."
+        "4. **Slow Movements:** Listeners become dizzy with fast moves. Azimuth changes should be gradual and slow (max 30 degrees/sec)."
+        "5. **Pause = Stop:** When there is silence in the audio, hold the position (stay still)."
         "\n\n"
         "## Input Script (JSON):"
         f"```json\n{script_json}\n```"
@@ -39,7 +42,7 @@ async def _build_instruction(readonly_ctx: ReadonlyContext) -> str:
 
 spatial_plan_agent = LlmAgent(
     name="spatial_plan_agent",
-    model=config["models"]["spatial_plan_agent"], # Assuming this model has multi-modal capabilities
+    model=config["models"]["spatial_plan_agent"],
     description="Creates a spatial audio plan from a script and audio file.",
     instruction=_build_instruction,
     output_key="spatial_plan_json",
